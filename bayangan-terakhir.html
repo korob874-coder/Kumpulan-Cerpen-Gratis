@@ -165,12 +165,39 @@ Arga menatap langit. “Tidak pernah benar-benar selesai. Tapi setidaknya… keb
 
         <!-- Story Navigation -->
         <div class="story-nav">
-            <a href="Kamar-hotel-705.html" class="nav-btn disabled">← Cerita Sebelumnya</a>
+            <a href="kamar-hotel-705.html" class="nav-btn disabled">← Cerita Sebelumnya</a>
             <a href="index.html" class="nav-btn">Kembali ke Beranda</a>
             <a href="" class="nav-btn">Cerita Selanjutnya →</a>
         </div>
     </main>
-
+ <!-- Sistem Komentar -->
+    <div class="comments-section">
+        <h2>💬 Komentar Pembaca</h2>
+        
+        <div class="local-warning">
+            ⚠️ <strong>Komentar disimpan di browser Anda</strong> - Komentar hanya akan terlihat di perangkat ini
+        </div>
+        
+        <div class="comment-form">
+            <h3>Tinggalkan Komentar</h3>
+            <form id="commentForm">
+                <div class="form-group">
+                    <label for="name">Nama</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Komentar</label>
+                    <textarea id="comment" name="comment" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Kirim Komentar</button>
+            </form>
+            <div id="formMessage"></div>
+        </div>
+        
+        <div class="comments-list" id="commentsList">
+            <div class="loading">Memuat komentar...</div>
+        </div>
+    </div>
     <!-- Author Modal -->
     <div id="authorModal" class="author-modal">
         <div class="author-modal-content">
@@ -207,5 +234,6 @@ Ia tergabung dalam grup musik Teenagers sebagai Vocalis utama.</p>
     <!-- External JavaScript -->
     <script src="js/script.js"></script>
     <script src="js/modal.js"></script>
+    <script src="js/comment-system.js"></script>
 </body>
 </html>
