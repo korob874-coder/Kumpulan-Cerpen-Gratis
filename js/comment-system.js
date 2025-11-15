@@ -1,6 +1,8 @@
-class CommentSystem {
+class NetlifyCommentSystem {
     constructor() {
         this.storyId = 'bayangan-terakhir';
+        // Gunakan relative path untuk Netlify Functions
+        this.apiUrl = '/.netlify/functions/comments';
         this.init();
     }
 
@@ -16,67 +18,98 @@ class CommentSystem {
         });
     }
 
-    submitComment() {
+    async submitComment() {
         const name = document.getElementById('name').value.trim();
         const comment = document.getElementById('comment').value.trim();
         const formMessage = document.getElementById('formMessage');
+        const submitBtn = document.querySelector('.submit-btn');
 
         if (!name || !comment) {
-            formMessage.innerHTML = '<div style="color: red; padding: 0.5rem;">Harap isi nama dan komentar</div>';
+            this.showMessage('Harap isi nama dan komentar', 'error');
             return;
         }
 
-        // Simpan ke localStorage
-        const comments = this.getComments();
-        const newComment = {
-            id: Date.now(),
-            name: name,
-            comment: comment,
-            date: new Date().toISOString(),
-            storyId: this.storyId
-        };
+        // Loading state
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Mengirim...';
+        submitBtn.disabled = true;
 
-        comments.unshift(newComment); // Tambah di awal
-        localStorage.setItem(`comments-${this.storyId}`, JSON.stringify(comments));
+        try {
+            const response = await fetch(this.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    storyId: this.storyId,
+                    name: name,
+                    comment: comment
+                }),
+            });
 
-        // Tampilkan pesan sukses
-        formMessage.innerHTML = '<div style="color: green; padding: 0.5rem;">✓ Komentar berhasil dikirim!</div>';
+            if (response.ok) {
+                const newComment = await response.json();
+                this.showMessage('Komentar berhasil dikirim!', 'success');
+                document.getElementById('commentForm').reset();
+                await this.loadComments(); // Refresh komentar
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Gagal mengirim komentar');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            this.showMessage('Gagal mengirim komentar: ' + error.message, 'error');
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    }
 
-        // Reset form
-        document.getElementById('commentForm').reset();
+    async loadComments() {
+        const container = document.getElementById('commentsList');
+        
+        try {
+            const response = await fetch(`${this.apiUrl}?storyId=${this.storyId}`);
+            
+            if (!response.ok) {
+                throw new Error('Gagal memuat komentar');
+            }
+            
+            const comments = await response.json();
+            
+            if (comments.length === 0) {
+                container.innerHTML = '<div class="no-comments">Belum ada komentar. Jadilah yang pertama!</div>';
+                return;
+            }
 
-        // Refresh tampilan komentar
-        this.loadComments();
+            container.innerHTML = comments.map(comment => `
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">${this.escapeHtml(comment.name)}</div>
+                        <div class="comment-date">${this.formatDate(comment.created_at)}</div>
+                    </div>
+                    <div class="comment-content">${this.escapeHtml(comment.comment)}</div>
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            console.error('Error loading comments:', error);
+            container.innerHTML = `
+                <div style="color: red; text-align: center; padding: 2rem;">
+                    ❌ Gagal memuat komentar. Silakan refresh halaman.
+                </div>
+            `;
+        }
+    }
 
-        // Hapus pesan setelah 3 detik
+    showMessage(message, type) {
+        const formMessage = document.getElementById('formMessage');
+        const color = type === 'success' ? 'green' : 'red';
+        formMessage.innerHTML = `<div style="color: ${color}; padding: 0.5rem;">${message}</div>`;
+        
         setTimeout(() => {
             formMessage.innerHTML = '';
-        }, 3000);
-    }
-
-    loadComments() {
-        const comments = this.getComments();
-        const container = document.getElementById('commentsList');
-
-        if (comments.length === 0) {
-            container.innerHTML = '<div class="no-comments">Belum ada komentar. Jadilah yang pertama!</div>';
-            return;
-        }
-
-        container.innerHTML = comments.map(comment => `
-            <div class="comment">
-                <div class="comment-header">
-                    <div class="comment-author">${this.escapeHtml(comment.name)}</div>
-                    <div class="comment-date">${this.formatDate(comment.date)}</div>
-                </div>
-                <div class="comment-content">${this.escapeHtml(comment.comment)}</div>
-            </div>
-        `).join('');
-    }
-
-    getComments() {
-        const stored = localStorage.getItem(`comments-${this.storyId}`);
-        return stored ? JSON.parse(stored) : [];
+        }, 5000);
     }
 
     escapeHtml(text) {
@@ -99,5 +132,5 @@ class CommentSystem {
 
 // Inisialisasi sistem komentar
 document.addEventListener('DOMContentLoaded', () => {
-    new CommentSystem();
+    new NetlifyCommentSystem();
 });
