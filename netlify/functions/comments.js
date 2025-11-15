@@ -21,9 +21,9 @@ exports.handler = async (event, context) => {
   try {
     // Initialize Supabase client
     const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_KEY
-    );
+  'https://sdvadynwnfvxdkcekjsm.supabase.co',      // ← PASTE URL DI SINI
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkdmFkeW53bmZ2eGRrY2VranNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNzE4NTMsImV4cCI6MjA3ODc0Nzg1M30.u_tiMmnlS-6GSeL_RKT7aiW9QIlnbNBOJx-iLJK6vOY' // ← PASTE KEY DI SINI
+);
 
     // GET - Ambil komentar
     if (event.httpMethod === 'GET') {
