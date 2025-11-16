@@ -252,5 +252,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p>Website dibuat dengan ❤️ untuk pecinta cerita pendek</p>
         </div>
     </footer>
+    <!-- Netlify Identity Widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
 </body>
 </html>
