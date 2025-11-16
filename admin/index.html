@@ -14,63 +14,87 @@
     </style>
 </head>
 <body>
-    <!-- PAKAI v2.10.0 YANG STABLE -->
-    <script src="https://unpkg.com/decap-cms@2.10.0/dist/decap-cms.js"></script>
+    <!-- Decap CMS v3 - No console logs -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     
     <script>
-        console.log('Decap CMS v2.10.0 loaded');
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM ready, initializing CMS...');
-            
-            try {
-                const CMS = window.CMS;
+        // Silent initialization - no console logs
+        window.CMS.init({
+            config: {
+                backend: {
+                    name: 'git-gateway',
+                    branch: 'main'
+                },
+                media_folder: 'images',
+                public_folder: '/images',
+                site_url: 'https://bagasyuzhong.netlify.app',
                 
-                if (typeof CMS === 'undefined') {
-                    console.error('CMS not loaded');
-                    return;
-                }
-
-                // Config yang clean tanpa commit_messages (bisa bikin error)
-                CMS.init({
-                    config: {
-                        backend: {
-                            name: 'git-gateway',
-                            branch: 'main'
-                        },
-                        locale: 'id',
-                        media_folder: 'images',
-                        public_folder: '/images',
-                        site_url: 'https://bagasyuzhong.netlify.app',
-                        
-                        collections: [
+                collections: [
+                    {
+                        name: 'pages',
+                        label: 'Halaman Website',
+                        files: [
                             {
-                                name: 'pages',
-                                label: 'Halaman',
-                                files: [
+                                label: 'Homepage',
+                                name: 'homepage',
+                                file: 'index.html',
+                                fields: [
                                     {
-                                        label: 'Homepage',
-                                        name: 'homepage',
-                                        file: 'index.html',
-                                        fields: [
-                                            {
-                                                label: 'Konten HTML',
-                                                name: 'body',
-                                                widget: 'code',
-                                                language: 'html'
-                                            }
-                                        ]
+                                        label: 'Konten HTML', 
+                                        name: 'body',
+                                        widget: 'code',
+                                        language: 'html'
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: 'stories',
+                        label: 'Kumpulan Cerpen',
+                        files: [
+                            {
+                                label: 'Kamar 705',
+                                name: 'kamar705',
+                                file: 'Kamar-705.html',
+                                fields: [
+                                    {
+                                        label: 'Konten HTML',
+                                        name: 'body', 
+                                        widget: 'code',
+                                        language: 'html'
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Bayangan Terakhir',
+                                name: 'bayanganterakhir',
+                                file: 'bayangan-terakhir.html',
+                                fields: [
+                                    {
+                                        label: 'Konten HTML',
+                                        name: 'body',
+                                        widget: 'code', 
+                                        language: 'html'
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Jaka dan Merpati Putih',
+                                name: 'jakadanmerpati',
+                                file: 'jaka-dan-merpati-putih.html',
+                                fields: [
+                                    {
+                                        label: 'Konten HTML',
+                                        name: 'body',
+                                        widget: 'code',
+                                        language: 'html'
                                     }
                                 ]
                             }
                         ]
                     }
-                });
-                
-                console.log('CMS v2 initialized successfully');
-                
-            } catch (error) {
-                console.error('CMS initialization error:', error);
+                ]
             }
         });
     </script>
