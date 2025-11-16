@@ -1,76 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Manager - Website Cerpen</title>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Website Cerpen</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
-  <script>
-    DecapCMS.init({
-      config: {
-        backend: {
-          name: 'git-gateway',
-          branch: 'main'
-        },
-        media_folder: 'images',
-        public_folder: '/images',
-        site_url: 'https://bagasyuzhong.netlify.app',
-        display_url: 'https://bagasyuzhong.netlify.app',
-        collections: [
-          {
-            name: 'pages',
-            label: 'Halaman',
-            folder: '',
-            create: false,
-            editor: {
-              preview: false
-            },
-            files: [
-              {
-                label: 'Homepage',
-                name: 'homepage', 
-                file: 'index.html',
-                fields: [
-                  { label: 'Judul Halaman', name: 'title', widget: 'string', required: false },
-                  { label: 'Konten HTML', name: 'body', widget: 'code', language: 'html' }
-                ]
-              }
-            ]
-          },
-          {
-            name: 'stories',
-            label: 'Cerpen',
-            folder: '',
-            create: false,
-            editor: {
-              preview: false
-            },
-            files: [
-              {
-                label: 'Kamar 705',
-                name: 'kamar-705',
-                file: 'Kamar-705.html',
-                fields: [
-                  { label: 'Judul Cerpen', name: 'title', widget: 'string', required: false },
-                  { label: 'Konten HTML', name: 'body', widget: 'code', language: 'html' }
-                ]
-              },
-              {
-                label: 'Bayangan Terakhir',
-                name: 'bayangan-terakhir', 
-                file: 'bayangan-terakhir.html',
-                fields: [
-                  { label: 'Judul Cerpen', name: 'title', widget: 'string', required: false },
-                  { label: 'Konten HTML', name: 'body', widget: 'code', language: 'html' }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    });
-  </script>
+    <div id="cms-loading" class="loading">
+        Memuat Editor...
+    </div>
+
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+        console.log('Decap CMS script loaded');
+        
+        // Tunggu sampai DOM ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM ready, initializing CMS...');
+            
+            try {
+                const CMS = window.CMS;
+                
+                if (typeof CMS === 'undefined') {
+                    document.getElementById('cms-loading').innerHTML = 
+                        'Error: Decap CMS tidak terload. Cek browser console.';
+                    return;
+                }
+
+                // Initialize dengan config sederhana
+                CMS.init({
+                    config: {
+                        backend: {
+                            name: 'git-gateway',
+                            branch: 'main',
+                            commit_messages: {
+                                create: 'Create {{collection}} "{{slug}}"',
+                                update: 'Update {{collection}} "{{slug}}"',
+                                delete: 'Delete {{collection}} "{{slug}}"',
+                                uploadMedia: 'Upload "{{path}}"',
+                                deleteMedia: 'Delete "{{path}}"',
+                            }
+                        },
+                        locale: 'id',
+                        media_folder: 'images',
+                        public_folder: '/images',
+                        site_url: 'https://bagasyuzhong.netlify.app',
+                        display_url: 'https://bagasyuzhong.netlify.app',
+                        
+                        collections: [
+                            {
+                                name: 'pages',
+                                label: 'Halaman',
+                                editor: {
+                                    preview: false
+                                },
+                                files: [
+                                    {
+                                        label: 'Homepage',
+                                        name: 'homepage',
+                                        file: 'index.html',
+                                        fields: [
+                                            {
+                                                label: 'Konten HTML',
+                                                name: 'body',
+                                                widget: 'code',
+                                                language: 'html'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                });
+                
+                console.log('CMS initialized successfully');
+                document.getElementById('cms-loading').style.display = 'none';
+                
+            } catch (error) {
+                console.error('CMS initialization error:', error);
+                document.getElementById('cms-loading').innerHTML = 
+                    'Error: ' + error.message;
+            }
+        });
+    </script>
 </body>
 </html>
