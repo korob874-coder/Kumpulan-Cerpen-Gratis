@@ -58,7 +58,7 @@ collections:
   # Collection untuk membuat cerpen BARU
   - name: "new_stories"
     label: "Cerpen Baru"
-    folder: ""
+    folder: "content"
     create: true
     slug: "{{slug}}"
     editor:
