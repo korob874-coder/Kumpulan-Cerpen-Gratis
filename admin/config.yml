@@ -2,68 +2,14 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "images"
+media_folder: "images" 
 public_folder: "/images"
 
-# Display URL yang benar di CMS
-site_url: https://bagasyuzhong.netlify.app
-display_url: https://bagasyuzhong.netlify.app
-
 collections:
-  # Collection untuk Halaman Utama
-  - name: "pages"
-    label: "Halaman"
-    folder: ""
-    create: false
-    editor:
-      preview: false
-    files:
-      - label: "Homepage"
-        name: "homepage"
-        file: "index.html"
-        fields:
-          - { label: "Judul Halaman", name: "title", widget: "string", required: false }
-          - { label: "Konten HTML", name: "body", widget: "code", language: "html", default_language: "html" }
-
-  # Collection untuk Cerpen
-  - name: "stories"
-    label: "Cerpen & Stories"
-    folder: ""
-    create: true
-    slug: "{{slug}}"
-    editor:
-      preview: false
-    files:
-      - label: "Kamar 705"
-        name: "kamar-705"
-        file: "Kamar-705.html"
-        fields:
-          - { label: "Judul Cerpen", name: "title", widget: "string", required: false }
-          - { label: "Konten HTML", name: "body", widget: "code", language: "html", default_language: "html" }
-
-      - label: "Bayangan Terakhir" 
-        name: "bayangan-terakhir"
-        file: "bayangan-terakhir.html"
-        fields:
-          - { label: "Judul Cerpen", name: "title", widget: "string", required: false }
-          - { label: "Konten HTML", name: "body", widget: "code", language: "html", default_language: "html" }
-
-      - label: "Jaka dan Merpati Putih"
-        name: "jaka-dan-merpati"
-        file: "jaka-dan-merpati-putih.html"
-        fields:
-          - { label: "Judul Cerpen", name: "title", widget: "string", required: false }
-          - { label: "Konten HTML", name: "body", widget: "code", language: "html", default_language: "html" }
-
-  # Collection untuk membuat cerpen BARU
-  - name: "new_stories"
-    label: "Cerpen Baru"
+  - name: "test"
+    label: "Test"
     folder: "content"
     create: true
-    slug: "{{slug}}"
-    editor:
-      preview: false
     fields:
-      - { label: "Judul Cerpen", name: "title", widget: "string", required: true }
-      - { label: "Slug/URL", name: "filename", widget: "string", hint: "Contoh: cerita-baru-saya (akan jadi cerita-baru-saya.html)", pattern: ["^[a-z0-9-]+$", "Hanya huruf kecil, angka, dan strip"] }
-      - { label: "Konten HTML", name: "body", widget: "code", language: "html", default_language: "html" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Content", name: "body", widget: "markdown" }
